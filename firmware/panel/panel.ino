@@ -2,22 +2,22 @@
 #include <Encoder.h>
 Joystick_ Joystick;
 
-const int TOTAL_COUNT = 2;
-const int PINS[] = {6,8};
+const int TOTAL_COUNT = 14;
+const int PINS[] = {6,7,8,9,10,11,12,A0,A1,A2,A3,A4,A5,MISO};
 
-const int TOGGLE_COUNT = 0; // TEMP
-const int TOGGLE[] = {6,8};
-int LAST_TOGGLE[] = {HIGH, HIGH};
+const int TOGGLE_COUNT = 8; // TEMP
+const int TOGGLE[] = {6,7,8,9,10,11,12,A0};
+int LAST_TOGGLE[] = {HIGH, HIGH, HIGH, HIGH, HIGH, HIGH, HIGH, HIGH};
 
-const int THREEWAY_COUNT = 0; // TEMP
-const int THREEWAY_UP[] = {2,3};
-const int THREEWAY_DOWN[] = {4,5};
-int LAST_THREEWAY[] = {-1, -1};
+const int THREEWAY_COUNT = 3; // TEMP
+const int THREEWAY_UP[] = {A1,A2,A3};
+const int THREEWAY_DOWN[] = {A4,A5,MISO};
+int LAST_THREEWAY[] = {-1, -1, -1};
 
-const int ENCODER_COUNT = 2;
-const int ENCODER_CLK[] = {2,3};
-const int ENCODER_DT[] = {4,5};
-int LAST_CLK[] = {0, 0};
+Encoder encoderA(2, 4);   // CLK, DT
+Encoder encoderB(3, 5);
+long lastA = 0;
+long lastB = 0;
 
 unsigned long lastCheck1 = 0;
 unsigned long lastCheck2 = 0;
@@ -25,13 +25,6 @@ unsigned long lastCheck2 = 0;
 void setup() {
   for (int i = 0; i < TOTAL_COUNT; i++) {
     pinMode(PINS[i], INPUT_PULLUP);
-  }
-  for (int i = 0; i < ENCODER_COUNT; i++) {
-    pinMode(ENCODER_CLK[i], INPUT);
-    pinMode(ENCODER_DT[i], INPUT);
-  }
-  for (int i = 0; i < ENCODER_COUNT; i++) {
-    LAST_CLK[i] = digitalRead(ENCODER_CLK[i]);
   }
   Serial.begin(9600);
   Joystick.begin();
@@ -44,15 +37,15 @@ void loop() {
       int now = digitalRead(TOGGLE[i]);
       if (now != LAST_TOGGLE[i]) {
         if (now == HIGH) {
-          Serial.print(1);
-          Serial.print(" TOGGLE: ");
-          Serial.println(i);
+          Joystick.setButton(2*i, 1);
+          delay(20);
+          Joystick.setButton(2*i, 0);
         
         }
         else {
-          Serial.print(0);
-          Serial.print(" TOGGLE: ");
-          Serial.println(i);
+          Joystick.setButton(2*i+1, 1);
+          delay(20);
+          Joystick.setButton(2*i+1, 0);
         }
         LAST_TOGGLE[i] = now;
       }
@@ -70,9 +63,9 @@ void loop() {
       else                                              now = 1;
 
       if (now != LAST_THREEWAY[i]) {
-        Serial.print(now);
-        Serial.print(" THREEWAY: ");
-        Serial.println(i);
+        Joystick.setButton(16+i*3+now, 1);
+        delay(20);
+        Joystick.setButton(16+i*3+now, 0);
 
         LAST_THREEWAY[i] = now;
       }
@@ -81,16 +74,29 @@ void loop() {
   }
 
   // ENCODER Block
-  for (int i = 0; i < ENCODER_COUNT; i++) {
-    int CLK_NOW = digitalRead(ENCODER_CLK[i]);
-    if (LAST_CLK[i] != CLK_NOW && CLK_NOW == LOW) {
-      if (digitalRead(ENCODER_DT[i]) != CLK_NOW) {
-        Serial.println("+");
-      }
-      else {
-        Serial.println("-");
-      }
-    }
-    LAST_CLK[i] = CLK_NOW;
+  long nowA = encoderA.read() / 4;
+  if (nowA > lastA) {
+    Joystick.setButton(25, 1);
+    delay(20);
+    Joystick.setButton(25, 0);
   }
+  if (nowA < lastA) {
+    Joystick.setButton(26, 1);
+    delay(20);
+    Joystick.setButton(26, 0);
+  }
+  lastA = nowA;
+
+  long nowB = encoderB.read() / 4;
+  if (nowB > lastB) {
+    Joystick.setButton(27, 1);
+    delay(20);
+    Joystick.setButton(27, 0);
+  }
+  if (nowB < lastB) {
+    Joystick.setButton(28, 1);
+    delay(20);
+    Joystick.setButton(28, 0);
+  }
+  lastB = nowB;
 }
