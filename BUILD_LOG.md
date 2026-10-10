@@ -55,3 +55,40 @@ Array overruns in C++ don't throw an error. They write into whatever memory sits
 A fault that seems to move when you swap components may still be on the board — swapping changes which pins are under test, not where the fault is.
 
 **Next:** Clear the solder bridge between pins 10 and 11. Buy a proper soldering iron (adjustable temperature, fine tip). Then start on the physical panel.
+
+## 2026-10-10 — Soldering all switch wiring
+
+### Done
+
+- Soldered lead wires to all 11 switches (8× MTS-101, 3× MTS-203). ~3 hours.
+- Wired both KY-040 encoders.
+- Pull-tested every joint. One failed and was redone; one other is weaker
+  than the rest.
+- Insulated every joint with electrical tape — no heat shrink available
+  from any source I trust locally.
+
+### Deferred
+
+- Switch common ground line. Waiting until the panel is cut so the chain
+  can be routed to final switch positions rather than guessed at.
+
+### Decisions
+
+- **Lap joints over hooked joints.** Tried both. Hooking the wire through
+  the lug hole is the usual advice, but the hooked joints came out weaker
+  in practice — the lug hole is small and the solder doesn't reliably wick
+  into the gap. Lap joints have more bonded area along the wire. Switched
+  to lap for the rest.
+- **Spliced wiring for the encoders.** No F-to-F jumpers available, and the
+  KY-040 pins are 2.54mm pitch — too tight to solder to comfortably. Cut
+  two F-to-M jumpers and spliced their female halves together rather than
+  risk bridging adjacent pins.
+- **Arduino Micro mounts vertically**, standing on its long edge, to save
+  floor area inside the enclosure. The board has no mounting holes, so it
+  will sit in a printed slot rather than on standoffs.
+
+### Open
+
+- Enclosure not yet modelled. Needs: internal depth set by the tallest
+  switch assembly plus wire bend radius, USB cutout derived from the slot
+  position, cable strain relief behind the port.
