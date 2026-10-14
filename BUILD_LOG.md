@@ -56,39 +56,56 @@ A fault that seems to move when you swap components may still be on the board �
 
 **Next:** Clear the solder bridge between pins 10 and 11. Buy a proper soldering iron (adjustable temperature, fine tip). Then start on the physical panel.
 
-## 2026-10-10 — Soldering all switch wiring
+---
 
-### Done
+## 2026-10-10 — soldered the wires on every switch
 
-- Soldered lead wires to all 11 switches (8× MTS-101, 3× MTS-203). ~3 hours.
+**Goal:** Get the lead wires soldered on all the switches and both encoders.
+
+**What happened:**
+
+- Soldered the lead wires on all 11 switches (8× MTS-101, 3× MTS-203). About 3 hours.
 - Wired both KY-040 encoders.
-- Pull-tested every joint. One failed and was redone; one other is weaker
-  than the rest.
-- Insulated every joint with electrical tape — no heat shrink available
-  from any source I trust locally.
+- Pulled on every joint to test it. One broke and I redid it. One other is weaker than the rest.
+- Taped every joint — no heat shrink anywhere I trust locally.
+- Left the common ground line for later. The panel isn't cut yet so I'd be guessing where the switches end up.
 
-### Deferred
+**Decisions:**
 
-- Switch common ground line. Waiting until the panel is cut so the chain
-  can be routed to final switch positions rather than guessed at.
+- **Lap joints, not hooked ones.** Everyone says to hook the wire through the lug hole. I tried both and the hooked ones came out weaker — the hole is small and the solder doesn't always get in. A lap joint grips more of the wire. Did the rest as lap joints.
+- **Spliced wires for the encoders.** No F-to-F wires available. The KY-040 pins are 2.54mm apart, too close to solder without bridging them. Cut two F-to-M jumpers and spliced the female halves together.
+- **The Micro stands vertically** on its long edge to take up less floor space in the box. It has no mounting holes so it goes in a printed slot, not on standoffs.
 
-### Decisions
+**Learned:** The usual advice isn't always right for the parts I actually have. I tried both ways and the one everyone recommends was worse on these lugs.
 
-- **Lap joints over hooked joints.** Tried both. Hooking the wire through
-  the lug hole is the usual advice, but the hooked joints came out weaker
-  in practice — the lug hole is small and the solder doesn't reliably wick
-  into the gap. Lap joints have more bonded area along the wire. Switched
-  to lap for the rest.
-- **Spliced wiring for the encoders.** No F-to-F jumpers available, and the
-  KY-040 pins are 2.54mm pitch — too tight to solder to comfortably. Cut
-  two F-to-M jumpers and spliced their female halves together rather than
-  risk bridging adjacent pins.
-- **Arduino Micro mounts vertically**, standing on its long edge, to save
-  floor area inside the enclosure. The board has no mounting holes, so it
-  will sit in a printed slot rather than on standoffs.
+**Next:** Model the enclosure. Internal depth comes from the tallest switch plus the wire bend behind it, the USB cutout comes from wherever the board slot puts the port, and the cable needs something to pull against behind the port.
 
-### Open
+---
 
-- Enclosure not yet modelled. Needs: internal depth set by the tallest
-  switch assembly plus wire bend radius, USB cutout derived from the slot
-  position, cable strain relief behind the port.
+## 2026-10-14 — panel arrived, switches mounted
+
+**Goal:** Mount the switches in the cut panel and start the ground bus.
+
+**What happened:**
+
+- Got the cut aluminium panel.
+- Mounted all 11 switches. Encoders not in yet.
+- Put both nuts on the top face — one to clamp, one as a jam nut against it. The switch body sits directly against the back of the panel.
+- Prepared the first of the two ground bus wires.
+
+**Problems:**
+
+- Two joints move more easily than the others → not sure why, they passed the pull test → leaving them, but these are the first ones to check if an input goes weird
+
+**Decisions:**
+
+- **Encoders go in diagonally** inside the box so their wires don't cross the switch wires behind the panel.
+
+**Learned:** The panel isn't really DCS-specific. It shows up as a normal USB game controller, so anything that reads joystick buttons can use it. It's a universal switch panel that I happened to build for DCS.
+
+**Next:**
+
+- Solder the second ground bus wire
+- Join both bus lines into one wire going to the Arduino's GND
+- Check continuity from the GND end to every switch ground lug before closing the box
+- Model the enclosure
