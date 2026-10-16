@@ -109,3 +109,32 @@ A fault that seems to move when you swap components may still be on the board �
 - Join both bus lines into one wire going to the Arduino's GND
 - Check continuity from the GND end to every switch ground lug before closing the box
 - Model the enclosure
+
+## 2026-10-16 — all wiring finished, every input tested
+
+**Goal:** Finish the ground buses and test all 13 inputs.
+
+**What happened:**
+
+- Soldered the second ground bus and joined both lines into one wire to the Arduino's GND
+- Tested every input
+
+**Problems:**
+
+- The two loose joints from the 14th broke → redid both → these were the two I'd already flagged, so I knew where to look first
+- Last three-way switch did nothing → its wire was never plugged into MISO → plugged it in
+- 5th ON-OFF switch did nothing → its ground connection had come off, bad solder joint → redid it
+- Burned myself on the iron
+
+**Decisions:**
+
+- **Panel-mounted USB port in the casing** (micro-USB to USB-C). Plugging the cable straight into the Arduino means the cable bend makes it very hard to fix the board in place, and every pull on the cable lands on the board's solder pads instead of the case.
+- **V2 will use a custom PCB** instead of hand-wiring everything.
+
+**Learned:** Insulation goes on _after_ all the soldering is done, not before. It melts.
+
+**Next:**
+
+- Build the casing
+- If the panel connector is USB-C female, check it has the 5.1kΩ CC pull-downs — without them a USB-C host won't power it at all
+- Check the internal pigtail carries data, not just power
